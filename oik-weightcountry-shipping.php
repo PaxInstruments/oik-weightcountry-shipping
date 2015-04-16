@@ -3,10 +3,12 @@
  * Plugin Name: oik Weight/Country Shipping
  * Plugin URI: http://www.oik-plugins.com/oik-plugins/oik-weightcountry-shipping
  * Description: WooCommerce extension for Weight/Country shipping
- * Version: 1.0.6
+ * Version: 1.0.8
  * Author: bobbingwide
- * Author URI: http://www.bobbingwide.com
+ * Author URI: http://www.oik-plugins.com/author/bobbingwide
  * License: GPL2
+ * Text Domain: oik-weightcountry-shipping
+ * Domain Path: /languages/
  
     Copyright 2012 andyswebdesign.ie 
     Copyright Bobbing Wide 2014 ( email : herb@bobbingwide.com ) 
@@ -24,27 +26,41 @@
     http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-include_once('oik-weightcountry-shipping2.php');
-init_oik_shipping2();
-
 add_action( 'plugins_loaded', 'init_oik_shipping', 0 );
 
+
+/**
+ * Implement "plugins_loaded" action for oik-weightcountry-shipping
+ * 
+ */
 function init_oik_shipping() {
 
 	if ( !class_exists( 'WC_Shipping_Method' ) ) {
     return;
   }
 
+  /**
+   * Weight/Country shipping class WooCommerce Extension
+   *
+   * Implements shipping charges by weight and country
+   *  
+   */
 	class OIK_Shipping extends WC_Shipping_Method {
-
+  
+    /**
+     * Constructor for OIK_Shipping class
+     *
+     * Sets the ID to 'awd_shipping'
+     * 
+     */
 		function __construct() {
-			$this->id           = 'awd_shipping'; // Retain the original code rather than use  'oik_shipping';
-			$this->method_title = __( 'Weight/Country', 'woocommerce' );
+			$this->id           = 'awd_shipping'; // Retain the original code rather than use 'oik_shipping';
+			$this->method_title = __( 'Weight/Country', 'oik-weightcountry-shipping' );
 
-			$this->admin_page_heading     = __( 'Weight and country based shipping', 'woocommerce' );
-			$this->admin_page_description = __( 'Define shipping by weight and country', 'woocommerce' );
+			$this->admin_page_heading     = __( 'Weight and country based shipping', 'oik-weightcountry-shipping' );
+			$this->admin_page_description = __( 'Define shipping by weight and country', 'oik-weightcountry-shipping' );
 
-			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( &$this, 'process_admin_options' ) );
+			add_action( 'woocommerce_update_options_shipping_awd_shipping', array( &$this, 'process_admin_options' ) );
 
 			$this->init();
 			$this->display_country_groups();
@@ -62,7 +78,6 @@ function init_oik_shipping() {
 			$this->type             = 'order';
 			$this->tax_status       = $this->get_option('tax_status');
 			$this->fee              = $this->get_option('fee');
-      $this->fuel_charge      = $this->get_option('fuel_charge');
 			$this->options			= isset( $this->settings['options'] ) ? $this->settings['options'] : '';
 			$this->options			= (array) explode( "\n", $this->options );
       if (empty($this->countries)) {
@@ -76,47 +91,41 @@ function init_oik_shipping() {
 
 			$this->form_fields = array(
 				'enabled'    => array(
-					'title'   => __( 'Enable/Disable', 'woocommerce' ),
+					'title'   => __( 'Enable/Disable', 'oik-weightcountry-shipping' ),
 					'type'    => 'checkbox',
-					'label'   => __( 'Enable this shipping method', 'woocommerce' ),
+					'label'   => __( 'Enable this shipping method', 'oik-weightcountry-shipping' ),
 					'default' => 'no',
 				),
 				'title'      => array(
-					'title'       => __( 'Method Title', 'woocommerce' ),
+					'title'       => __( 'Method Title', 'oik-weightcountry-shipping' ),
 					'type'        => 'text',
-					'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
-					'default'     => __( 'Regular Shipping', 'woocommerce' ),
+					'description' => __( 'This controls the title which the user sees during checkout.', 'oik-weightcountry-shipping' ),
+					'default'     => __( 'Regular Shipping', 'oik-weightcountry-shipping' ),
 				),
 				'tax_status' => array(
-					'title'       => __( 'Tax Status', 'woocommerce' ),
+					'title'       => __( 'Tax Status', 'oik-weightcountry-shipping' ),
 					'type'        => 'select',
 					'description' => '',
 					'default'     => 'taxable',
 					'options'     => array(
-						'taxable' => __( 'Taxable', 'woocommerce' ),
-						'none'    => __( 'None', 'woocommerce' ),
+						'taxable' => __( 'Taxable', 'oik-weightcountry-shipping' ),
+						'none'    => __( 'None', 'oik-weightcountry-shipping' ),
 					),
 				),
 				'fee'        => array(
-					'title'       => __( 'Handling Fee', 'woocommerce' ),
+					'title'       => __( 'Handling Fee', 'oik-weightcountry-shipping' ),
 					'type'        => 'text',
-					'description' => __( 'Fee excluding tax, e.g. 3.50. Leave blank to disable.', 'woocommerce' ),
+					'description' => __( 'Fee excluding tax, e.g. 3.50. Leave blank to disable.', 'oik-weightcountry-shipping' ),
 					'default'     => '',
 				),
-        'fuel_charge'        => array(
-          'title'       => __( 'Fuel Charge', 'woocommerce' ),
-          'type'        => 'text',
-          'description' => __( 'Precent of fuel charged to base price. Use decimal format (ie 0.1 NOT %10)', 'woocommerce' ),
-          'default'     => '',
-        ),
 				'options'       => array(
-					'title'       => __( 'Shipping Rates', 'woocommerce' ),
+					'title'       => __( 'Shipping Rates', 'oik-weightcountry-shipping' ),
 					'type'        => 'textarea',
-					'description' => __( 'Set your weight based rates in ' . get_option( 'woocommerce_weight_unit' ) . ' for country groups (one per line). Example: <code>Max weight|Cost|country group number</code>. Example: <code>10|6.95|3</code>. For decimal, use a dot not a comma.', 'woocommerce' ),
+					'description' => __( 'Set your weight based rates in ' . get_option( 'woocommerce_weight_unit' ) . ' for country groups (one per line). Syntax: Max weight|Cost|country group number. Example: 10|6.95|3. For decimal, use a dot not a comma.', 'oik-weightcountry-shipping' ),
 					'default'     => '',
 				),
 				'country_group_no' => array(
-					'title' 		=> __( 'Number of country groups', 'woocommerce' ),
+					'title' 		=> __( 'Number of country groups', 'oik-weightcountry-shipping' ),
 					'type' 			=> 'text',
 					'description'	=> __( 'Number of groups of countries sharing delivery rates (hit "Save changes" button after you have changed this setting).' ),
 					'default' 		=> '3',
@@ -125,11 +134,11 @@ function init_oik_shipping() {
         /* Didn't re-add sync-countries option since this has updated in WooCommerce 2.1 Herb 2014/03/27
         // @TODO Need to use network_admin_url( "/wp-admin/admin.php?page=woocommerce_settings&tab=general"
         'sync_countries' => array(
-           'title' 		=> __( 'Add countries to allowed', 'woocommerce' ),
+           'title' 		=> __( 'Add countries to allowed', 'oik-weightcountry-shipping' ),
            'type' 			=> 'checkbox',
            'label' 		=> __( 'Countries added to country groups will be automatically added to the Allowed Countries in the General settings tab.
                              This makes sure countries defined in country groups are visible on checkout.
-                             Note: Deleting a country from the country group will not delete the country from Allowed Countries.', 'woocommerce' ),
+                             Note: Deleting a country from the country group will not delete the country from Allowed Countries.', 'oik-weightcountry-shipping' ),
            'default' 		=> 'no',
         ),
         */
@@ -149,7 +158,7 @@ function init_oik_shipping() {
       $number = $this->country_group_no;
       for ( $counter = 1; $number >= $counter; $counter++ ) {
         $this->form_fields['countries'.$counter] =  array(
-                    'title'     => sprintf(__( 'Country Group %s', 'woocommerce' ), $counter),
+                    'title'     => sprintf(__( 'Country Group %s', 'oik-weightcountry-shipping' ), $counter),
                     'type'      => 'multiselect',
                     'class'     => 'chosen_select',
                     'css'       => 'width: 450px;',
@@ -169,15 +178,11 @@ function init_oik_shipping() {
       $country_group = $this->get_countrygroup($package);
       $rates = $this->get_rates_by_countrygroup( $country_group );
       $weight     = $woocommerce->cart->cart_contents_weight;
-      $final_rate = $smallest_rate = $this->pick_smallest_rate($rates, $weight);
-      #$final_rate = $this->pick_smallest_rate($rates, $weight);
+      $final_rate = $this->pick_smallest_rate($rates, $weight);
       if ( $final_rate !== false) {
         $taxable = ($this->tax_status == 'taxable') ? true : false;
         if ( $this->fee > 0 && $package['destination']['country'] ) {
           $final_rate += $this->fee;
-        }
-        if ($this->fuel_charge > 0 ) {
-          $final_rate += $smallest_rate * $this->fuel_charge;
         }
         $rate = array(
              'id'        => $this->id,
@@ -215,6 +220,9 @@ function init_oik_shipping() {
     /**
      * Retrieves all rates available for the selected country group
      *
+     * Now supports separators of '/' forward slash and ',' comma as well as vertical bar
+     * Also trims off blanks.
+     *
      * @param integer $country_group 
      * @return array $countrygroup_rate - the subset of options for the given country group returned in array form
      */
@@ -223,7 +231,11 @@ function init_oik_shipping() {
       if ( sizeof( $this->options ) > 0) {
         foreach ( $this->options as $option => $value ) {
           $value = trim( $value );
+          $value = str_replace( array( "/", "," ), "|", $value );
           $rate = explode( "|", $value );
+          foreach ( $rate as $key => $val ) {
+            $rate[$key] = trim( $val );
+          }
           if ( isset( $rate[2] ) && $rate[2] == $country_group ) {
             $countrygroup_rate[] = $rate;
           }
@@ -272,14 +284,14 @@ function init_oik_shipping() {
     }
     
     /**
-     *   For help and how to use go <a href="http://www.andyswebdesign.ie/blog/free-woocommerce-weight-and-country-based-shipping-extension-plugin/" target="_blank">here</a>', 'woocommerce'); 
+     *   For help and how to use go <a href="http://www.andyswebdesign.ie/blog/free-woocommerce-weight-and-country-based-shipping-extension-plugin/" target="_blank">here</a>', 'oik-weightcountry-shipping'); 
      */
     public function admin_options() {
 
     	?>
-    	<h3><?php _e('Weight and Country based shipping', 'woocommerce'); ?></h3>
-    	<p><?php _e('Lets you calculate shipping based on Country and weight of the cart.', 'woocommerce' ); ?>
-      <br /><?php _e( 'Lets you set unlimited weight bands on per country basis and group countries that share same delivery cost/bands.', 'woocommerce' ); ?>
+    	<h3><?php _e('Weight and Country based shipping', 'oik-weightcountry-shipping'); ?></h3>
+    	<p><?php _e('Lets you calculate shipping based on Country and weight of the cart.', 'oik-weightcountry-shipping' ); ?>
+      <br /><?php _e( 'Lets you set unlimited weight bands on per country basis and group countries that share same delivery cost/bands.', 'oik-weightcountry-shipping' ); ?>
       </p>
     	<table class="form-table">
     	<?php
