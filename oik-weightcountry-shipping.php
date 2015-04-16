@@ -101,7 +101,7 @@ function init_oik_shipping() {
 					'default'     => '',
 				),
         'fuel_charge'        => array(
-          'title'       => __( 'Fule Charge', 'woocommerce' ),
+          'title'       => __( 'Fuel Charge', 'woocommerce' ),
           'type'        => 'text',
           'description' => __( 'Precent of fuel charged to base price. Use decimal format (ie 0.1 NOT %10)', 'woocommerce' ),
           'default'     => '',
