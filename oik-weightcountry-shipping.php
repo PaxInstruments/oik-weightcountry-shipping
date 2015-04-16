@@ -59,6 +59,7 @@ function init_oik_shipping() {
 			$this->type             = 'order';
 			$this->tax_status       = $this->get_option('tax_status');
 			$this->fee              = $this->get_option('fee');
+      $this->fuel_charge      = $this->get_option('fuel_charge');
 			$this->options			= isset( $this->settings['options'] ) ? $this->settings['options'] : '';
 			$this->options			= (array) explode( "\n", $this->options );
       if (empty($this->countries)) {
@@ -99,6 +100,12 @@ function init_oik_shipping() {
 					'description' => __( 'Fee excluding tax, e.g. 3.50. Leave blank to disable.', 'woocommerce' ),
 					'default'     => '',
 				),
+        'fuel_charge'        => array(
+          'title'       => __( 'Fule Charge', 'woocommerce' ),
+          'type'        => 'text',
+          'description' => __( 'Precent of fuel charged to base price. Use decimal format (ie 0.1 NOT %10)', 'woocommerce' ),
+          'default'     => '',
+        ),
 				'options'       => array(
 					'title'       => __( 'Shipping Rates', 'woocommerce' ),
 					'type'        => 'textarea',
@@ -159,11 +166,15 @@ function init_oik_shipping() {
       $country_group = $this->get_countrygroup($package);
       $rates = $this->get_rates_by_countrygroup( $country_group );
       $weight     = $woocommerce->cart->cart_contents_weight;
-      $final_rate = $this->pick_smallest_rate($rates, $weight);
+      $final_rate = $smallest_rate = $this->pick_smallest_rate($rates, $weight);
+      #$final_rate = $this->pick_smallest_rate($rates, $weight);
       if ( $final_rate !== false) {
         $taxable = ($this->tax_status == 'taxable') ? true : false;
         if ( $this->fee > 0 && $package['destination']['country'] ) {
           $final_rate += $this->fee;
+        }
+        if ($this->fuel_charge > 0 ) {
+          $final_rate += $smallest_rate * $this->fuel_charge;
         }
         $rate = array(
              'id'        => $this->id,
