@@ -26,8 +26,8 @@
     http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-#include_once('oik-weightcountry-shipping2.php');
-#init_oik_shipping2();
+include_once('oik-weightcountry-shipping2.php');
+init_oik_shipping2();
 
 add_action( 'plugins_loaded', 'init_oik_shipping', 0 );
 

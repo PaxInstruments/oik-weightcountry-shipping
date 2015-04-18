@@ -27,7 +27,7 @@
 */
 
 
-add_action( 'plugins_loaded', 'init_oik_shipping2', 0 );
+#add_action( 'plugins_loaded', 'init_oik_shipping2', 0 );
 
 
 /**
