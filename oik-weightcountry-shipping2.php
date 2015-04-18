@@ -14,7 +14,7 @@ function init_oik_shipping2() {
 
     function __construct() {
       $this->id           = 'awd_shipping2'; // Retain the original code rather than use  'oik_shipping2';
-      $this->method_title = __( 'Weight/Country 2', 'woocommerce' );
+      $this->method_title = __( 'Hong Kong Post', 'woocommerce' );
 
       $this->admin_page_heading     = __( 'Weight and country based shipping', 'woocommerce' );
       $this->admin_page_description = __( 'Define shipping by weight and country', 'woocommerce' );
