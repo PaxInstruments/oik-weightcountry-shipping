@@ -26,8 +26,8 @@
     http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-include_once('oik-weightcountry-shipping2.php');
-init_oik_shipping2();
+#include_once('oik-weightcountry-shipping2.php');
+#init_oik_shipping2();
 
 add_action( 'plugins_loaded', 'init_oik_shipping', 0 );
 
@@ -123,7 +123,7 @@ function init_oik_shipping() {
           'default'     => '',
         ),
         'fuel_charge'        => array(
-          'title'       => __( 'Fuel Charge', 'woocommerce' ),
+          'title'       => __( 'Fuel Charge', 'oik-weightcountry-shipping' ),
           'type'        => 'text',
           'description' => __( 'Precent of fuel charged to base price. Use decimal format (ie 0.1 NOT %10)', 'woocommerce' ),
           'default'     => '',
