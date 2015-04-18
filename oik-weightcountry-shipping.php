@@ -190,6 +190,11 @@ function init_oik_shipping() {
       $weight     = $woocommerce->cart->cart_contents_weight;
       $final_rate = $this->pick_smallest_rate($rates, $weight);
       $smallest_rate = $final_rate;
+      set_option('paxmanchris_debug', array(
+        'smallest_rate' => $smallest_rate,
+        'weight' => $weight
+        )
+      );
       if ( $final_rate !== false) {
         $taxable = ($this->tax_status == 'taxable') ? true : false;
         if ( $this->fee > 0 && $package['destination']['country'] ) {
