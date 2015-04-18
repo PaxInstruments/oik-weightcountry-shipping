@@ -27,7 +27,7 @@
 */
 
 
-add_action( 'plugins_loaded', 'init_oik_shipping2', 0 );
+#add_action( 'plugins_loaded', 'init_oik_shipping2', 1 );
 
 
 /**
@@ -187,7 +187,7 @@ function init_oik_shipping2() {
       $rates = $this->get_rates_by_countrygroup( $country_group );
       $weight     = $woocommerce->cart->cart_contents_weight;
       $final_rate = $this->pick_smallest_rate($rates, $weight);
-      $smallest_rate = $final_rate;:
+      $smallest_rate = $final_rate;
       if ( $final_rate !== false) {
         $taxable = ($this->tax_status == 'taxable') ? true : false;
         if ( $this->fee > 0 && $package['destination']['country'] ) {
@@ -326,6 +326,6 @@ function add_oik_shipping2( $methods ) {
   return $methods;
 }
 
-add_filter( 'woocommerce_shipping_methods', 'add_oik_shipping2' );
+#add_filter( 'woocommerce_shipping_methods', 'add_oik_shipping2' );
 
 

@@ -26,8 +26,8 @@
     http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-include_once('oik-weightcountry-shipping2.php');
-init_oik_shipping2();
+#include_once('oik-weightcountry-shipping2.php');
+#init_oik_shipping2();
 
 add_action( 'plugins_loaded', 'init_oik_shipping', 0 );
 
@@ -296,6 +296,21 @@ function init_oik_shipping() {
             return 0.00;
         }
     }
+
+    class OIK_Shipping2 extends OIK_Shipping {
+        function __construct() {
+        $this->id           = 'awd_shipping2'; // Retain the original code rather than use 'oik_shipping';
+        $this->method_title = __( 'DHL', 'oik-weightcountry-shipping' );
+
+        $this->admin_page_heading     = __( 'Weight and country based shipping', 'oik-weightcountry-shipping' );
+        $this->admin_page_description = __( 'Define shipping by weight and country', 'oik-weightcountry-shipping' );
+
+        add_action( 'woocommerce_update_options_shipping_awd_shipping', array( &$this, 'process_admin_options' ) );
+
+        $this->init();
+        $this->display_country_groups();
+      }
+    }
     
     /**
      *   For help and how to use go <a href="http://www.andyswebdesign.ie/blog/free-woocommerce-weight-and-country-based-shipping-extension-plugin/" target="_blank">here</a>', 'oik-weightcountry-shipping'); 
@@ -317,6 +332,9 @@ function init_oik_shipping() {
     }
 
   } // end OIK_Shipping
+
+
+
 }
 
   
@@ -325,6 +343,7 @@ function init_oik_shipping() {
  */  
 function add_oik_shipping( $methods ) {
   $methods[] = 'OIK_Shipping';
+  $methods[] = 'OIK_Shipping2';
   return $methods;
 }
 
