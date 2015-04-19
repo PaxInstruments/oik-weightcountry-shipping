@@ -329,7 +329,7 @@ function init_oik_shipping() {
   class OIK_Shipping2 extends OIK_Shipping {
       function __construct() {
       $this->id           = 'awd_shipping2'; // Retain the original code rather than use 'oik_shipping';
-      $this->method_title = __( 'DHL', 'oik-weightcountry-shipping' );
+      $this->method_title = __( 'Hong Kong Post', 'oik-weightcountry-shipping' );
 
       $this->admin_page_heading     = __( 'Weight and country based shipping', 'oik-weightcountry-shipping' );
       $this->admin_page_description = __( 'Define shipping by weight and country', 'oik-weightcountry-shipping' );
