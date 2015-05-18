@@ -334,7 +334,7 @@ function init_oik_shipping() {
       $this->admin_page_heading     = __( 'Weight and country based shipping', 'oik-weightcountry-shipping' );
       $this->admin_page_description = __( 'Define shipping by weight and country', 'oik-weightcountry-shipping' );
 
-      add_action( 'woocommerce_update_options_shipping_awd_shipping', array( &$this, 'process_admin_options' ) );
+      add_action( 'woocommerce_update_options_shipping_awd_shipping2', array( &$this, 'process_admin_options' ) );
 
       $this->init();
       $this->display_country_groups();
