@@ -3,13 +3,14 @@
  * Plugin Name: oik Weight/Country Shipping - paxinstruments customized
  * Plugin URI: http://www.oik-plugins.com/oik-plugins/oik-weightcountry-shipping
  * Description: WooCommerce extension for Weight/Country shipping
- * Version: 1.2
+ * Version: 1.3.1
  * Author: bobbingwide
  * Author URI: http://www.oik-plugins.com/author/bobbingwide
  * License: GPL2
  * Text Domain: oik-weightcountry-shipping
  * Domain Path: /languages/
  
+    Copyright Bobbing Wide 2014,2015 ( email : herb@bobbingwide.com ) 
     Copyright 2012 andyswebdesign.ie 
     Copyright Bobbing Wide 2014 ( email : herb@bobbingwide.com ) 
 
@@ -38,7 +39,7 @@ add_action( 'plugins_loaded', 'init_oik_shipping', 0 );
  */
 function init_oik_shipping() {
 
-  if ( !class_exists( 'WC_Shipping_Method' ) ) {
+	if ( !class_exists( 'WC_Shipping_Method' ) ) {
     return;
   }
 
@@ -48,7 +49,14 @@ function init_oik_shipping() {
    * Implements shipping charges by weight and country
    *  
    */
-  class OIK_Shipping extends WC_Shipping_Method {
+	class OIK_Shipping extends WC_Shipping_Method {
+  
+  
+  	/**
+  	 * Titles for the selected country group
+  	 *
+  	 */
+  	public $countrygroup_title;
   
     /**
      * Constructor for OIK_Shipping class
@@ -87,7 +95,8 @@ function init_oik_shipping() {
       if (empty($this->countries)) {
         $this->availability = $this->settings['availability'] = 'all';
       }
-    }
+      $this->countrygroup_title = $this->title;
+		}
 
     function init_form_fields() {
 
@@ -141,17 +150,7 @@ function init_oik_shipping() {
           'default'     => '3',
         ),
         
-        /* Didn't re-add sync-countries option since this has updated in WooCommerce 2.1 Herb 2014/03/27
-        // @TODO Need to use network_admin_url( "/wp-admin/admin.php?page=woocommerce_settings&tab=general"
-        'sync_countries' => array(
-           'title'    => __( 'Add countries to allowed', 'oik-weightcountry-shipping' ),
-           'type'       => 'checkbox',
-           'label'    => __( 'Countries added to country groups will be automatically added to the Allowed Countries in the General settings tab.
-                             This makes sure countries defined in country groups are visible on checkout.
-                             Note: Deleting a country from the country group will not delete the country from Allowed Countries.', 'oik-weightcountry-shipping' ),
-           'default'    => 'no',
-        ),
-        */
+   
 
       );
     }
