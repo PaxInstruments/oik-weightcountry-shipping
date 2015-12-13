@@ -3,7 +3,7 @@
  * Plugin Name: oik Weight/Country Shipping - paxinstruments customized
  * Plugin URI: http://www.oik-plugins.com/oik-plugins/oik-weightcountry-shipping
  * Description: WooCommerce extension for Weight/Country shipping
- * Version: 1.3.1
+ * Version: 1.3.2
  * Author: bobbingwide
  * Author URI: http://www.oik-plugins.com/author/bobbingwide
  * License: GPL2
