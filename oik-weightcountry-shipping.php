@@ -340,6 +340,21 @@ function init_oik_shipping() {
     }
   }
 
+  class OIK_Shipping3 extends OIK_Shipping {
+      function __construct() {
+      $this->id           = 'awd_shipping3'; // Retain the original code rather than use 'oik_shipping';
+      $this->method_title = __( 'eSpeedPost', 'oik-weightcountry-shipping' );
+
+      $this->admin_page_heading     = __( 'Weight and country based shipping', 'oik-weightcountry-shipping' );
+      $this->admin_page_description = __( 'Define shipping by weight and country', 'oik-weightcountry-shipping' );
+
+      add_action( 'woocommerce_update_options_shipping_awd_shipping3', array( &$this, 'process_admin_options' ) );
+
+      $this->init();
+      $this->display_country_groups();
+    }
+  }
+
 }
 
   
