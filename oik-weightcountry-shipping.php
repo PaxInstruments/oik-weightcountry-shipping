@@ -364,6 +364,7 @@ function init_oik_shipping() {
 function add_oik_shipping( $methods ) {
   $methods[] = 'OIK_Shipping';
   $methods[] = 'OIK_Shipping2';
+  $methods[] = 'OIK_Shipping3';
   return $methods;
 }
 
